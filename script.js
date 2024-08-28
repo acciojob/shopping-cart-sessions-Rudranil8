@@ -12,26 +12,66 @@ const products = [
 // DOM elements
 const productList = document.getElementById("product-list");
 
-// Render product list
+
+// function renderProducts() {
+//   products.forEach((product) => {
+//     const li = document.createElement("li");
+//     li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
+//     productList.appendChild(li);
+//   });
+// }
 function renderProducts() {
   products.forEach((product) => {
     const li = document.createElement("li");
     li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
     productList.appendChild(li);
+    
+    const btn = li.querySelector('.add-to-cart-btn');
+    btn.addEventListener('click', function(event) {
+      const id = event.target.getAttribute('data-id');
+      addToCart(id);
+    });
   });
 }
-
 // Render cart list
-function renderCart() {}
+
+function renderCart() {
+	const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+	const cartList = document.getElementById("cart-list");
+	cartList.innerHTML = '';
+	cart.forEach((item) => {
+	    const li = document.createElement("li");
+	    li.textContent = `${item.name} - $${item.price}`;
+	    cartList.appendChild(li);
+	});
+}
 
 // Add item to cart
-function addToCart(productId) {}
+
+let cart=[];
+function addToCart(productId) {
+	const product = products.find(item => item.id === parseInt(productId));
+	cart.push(product);
+	sessionStorage.setItem('cart', JSON.stringify(cart));
+	renderCart();
+}
 
 // Remove item from cart
-function removeFromCart(productId) {}
+function removeFromCart(productId) {
+	const index = cart.findIndex(item => item.id === parseInt(productId));
+	if (index !== -1) {
+		cart.splice(index, 1);
+	}
+	sessionStorage.setItem('cart', JSON.stringify(cart));
+	renderCart();
+}
 
-// Clear cart
-function clearCart() {}
+
+function clearCart() {
+	cart = [];
+	sessionStorage.setItem('cart', JSON.stringify(cart));
+	renderCart();
+}
 
 // Initial render
 renderProducts();
