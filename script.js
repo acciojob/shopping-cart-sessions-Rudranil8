@@ -12,14 +12,6 @@ const products = [
 // DOM elements
 const productList = document.getElementById("product-list");
 
-
-// function renderProducts() {
-//   products.forEach((product) => {
-//     const li = document.createElement("li");
-//     li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
-//     productList.appendChild(li);
-//   });
-// }
 function renderProducts() {
   products.forEach((product) => {
     const li = document.createElement("li");
@@ -35,15 +27,46 @@ function renderProducts() {
 }
 // Render cart list
 
+// function renderCart() {
+// 	const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+// 	const cartList = document.getElementById("cart-list");
+// 	cartList.innerHTML = '';
+// 	cart.forEach((item) => {
+// 	    const li = document.createElement("li");
+// 	    // li.textContent = `${item.name} - $${item.price}`;
+// 		li.innerHTML = `${item.name} - $${item.price} <button class="remove-from-cart-btn" data-id="${item.id}">Remove</button>`;
+		
+// 	    cartList.appendChild(li);
+// 		const btn = li.querySelector('.remove-from-cart-btn');
+// 		btn.addEventListener('click', function(event) {
+// 	      const id = event.target.getAttribute('data-id');
+//       removeFromCart(id);
+// 	});
+// }
+
 function renderCart() {
-	const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
-	const cartList = document.getElementById("cart-list");
-	cartList.innerHTML = '';
-	cart.forEach((item) => {
-	    const li = document.createElement("li");
-	    li.textContent = `${item.name} - $${item.price}`;
-	    cartList.appendChild(li);
-	});
+  // Get the cart array from sessionStorage
+  const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+
+  // Get the cart list element
+  const cartList = document.getElementById("cart-list");
+
+  // Clear the cart list
+  cartList.innerHTML = '';
+
+  // Add each item in the cart to the cart list
+  cart.forEach((item) => {
+    const li = document.createElement("li");
+    li.innerHTML = `${item.name} - $${item.price} <button class="remove-from-cart-btn" data-id="${item.id}">Remove</button>`;
+    cartList.appendChild(li);
+
+    // Add event listener to the "Remove" button
+    const btn = li.querySelector('.remove-from-cart-btn');
+    btn.addEventListener('click', function(event) {
+      const id = event.target.getAttribute('data-id');
+      removeFromCart(id);
+    });
+  });
 }
 
 // Add item to cart
